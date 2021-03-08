@@ -1,5 +1,4 @@
 import fileSystem from "fs";
-import lodash from 'lodash';
 
 /**
  * Handles the data given by gitlab API
