@@ -1,5 +1,6 @@
 import fileSystem from 'fs';
 import minimist from 'minimist'
+import lodash from 'lodash'
 import {handleProjectData} from "./processing/ProjectDataHandling.mjs";
 import jsonDataCall from "./calls/SimpleJsonData.mjs";
 import {genericUrlError, removeTokenFromUrl} from "./Helpers.mjs";
@@ -28,7 +29,15 @@ jsonDataCall(versions_url,
         //Call main projects endpoint
         jsonDataCall(projects_url,
             (projects) => {
-                handleProjectData(removeTokenFromUrl(projects_url, token), 'output/projects.json', projects); //TODO args for file path
+                const groupData = {
+                    web_url: lodash.first(projects).namespace.web_url,
+                    full_name: lodash.first(projects).namespace.full_path
+                };
+                handleProjectData(groupData,
+                    removeTokenFromUrl(projects_url, token),
+                    'output/projects.md',//TODO args for file path
+                    'output/projects.json',//TODO args for file path
+                    projects);
             },
             (err) => genericUrlError(removeTokenFromUrl(versions_url, token), err)
         );
@@ -40,8 +49,11 @@ jsonDataCall(versions_url,
                     const url = `${api_url}groups/${group.id}/projects?private_token=${token}&per_page=100&order_by=created_at`;
                     //Call main projects endpoint
                     jsonDataCall(url, (projects) => {
-                            console.log('\nGroup:' + group.path);
-                            handleProjectData(removeTokenFromUrl(url, token), `output/projects-${group.path}.json`, projects); //TODO args for file path
+                            handleProjectData(group,
+                                removeTokenFromUrl(url, token),
+                                `output/projects-${group.path}.md`,//TODO args for file path
+                                `output/projects-${group.path}.json`,//TODO args for file path
+                                projects);
                         },
                         (err) => genericUrlError(removeTokenFromUrl(versions_url, token), err)
                     );
