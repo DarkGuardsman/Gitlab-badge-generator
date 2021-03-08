@@ -1,6 +1,12 @@
 import https from "https";
 
-export default function jsonDataCall(url, callback) {
+/**
+ *
+ * @param {String} url
+ * @param {function<Object>}callback
+ * @param {function<Object> | undefined} errorCallback
+ */
+export default function jsonDataCall(url, callback, errorCallback) {
     https.get(url, (resp) => {
         let data = '';
 
@@ -12,7 +18,7 @@ export default function jsonDataCall(url, callback) {
         // The whole response has been received. Print out the result.
         resp.on('end', () => {
 
-            if(data !== null && data !== undefined && data.trim() !== "") {
+            if (data !== null && data !== undefined && data.trim() !== "") {
 
                 const json = JSON.parse(data);
 
@@ -23,12 +29,16 @@ export default function jsonDataCall(url, callback) {
                 //Convert string data to json
                 callback(json);
             } else {
-                throw new Error("Failed to get JSON data for call " + url);
+                throw new Error("Failed to get JSON data for call");
             }
 
         });
     }).on("error", (err) => {
-        console.log("Error: " + err.message);
+        if (errorCallback !== undefined) {
+            errorCallback(err);
+        } else {
+            console.log("Error: " + err.message);
+        }
     });
 }
 
