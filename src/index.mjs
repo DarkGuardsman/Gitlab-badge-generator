@@ -35,8 +35,8 @@ jsonDataCall(versions_url,
                 };
                 handleProjectData(groupData,
                     removeTokenFromUrl(projects_url, token),
-                    'output/projects.md',//TODO args for file path
                     'output/projects.json',//TODO args for file path
+                    'output/projects.md',//TODO args for file path
                     projects);
             },
             (err) => genericUrlError(removeTokenFromUrl(versions_url, token), err)
@@ -51,8 +51,8 @@ jsonDataCall(versions_url,
                     jsonDataCall(url, (projects) => {
                             handleProjectData(group,
                                 removeTokenFromUrl(url, token),
-                                `output/projects-${group.path}.md`,//TODO args for file path
                                 `output/projects-${group.path}.json`,//TODO args for file path
+                                `output/projects-${group.path}.md`,//TODO args for file path
                                 projects);
                         },
                         (err) => genericUrlError(removeTokenFromUrl(versions_url, token), err)

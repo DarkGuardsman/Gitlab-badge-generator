@@ -1,4 +1,5 @@
 import fileSystem from "fs";
+import lodash from 'lodash';
 
 /**
  * Handles the data given by gitlab API
@@ -24,7 +25,7 @@ export function handleProjectData(group, url, jsonFilePath,markdownFilePath, pro
         listProjects(projects)
 
         //Generate badges
-        generateBadges(markdownFilePath, projects);
+        generateBadges(markdownFilePath, group, projects);
     }
 }
 
@@ -51,9 +52,30 @@ function writeProjectData(path, projects) {
 }
 
 /**
- * @param {String} filePath
+ * @param {String} path
  * @param {Array.<GitlabProject>} projects
  */
-function generateBadges(filePath, projects) {
+function generateBadges(path, group, projects) {
+    //Generate header
+    let output = `## ${group.full_name}`;
+    output += `\nUrl: ${group.web_url}\n`
+
+    //Generate table of projects
+    output += "\n| Project | Pipeline Status | Unit Testing (%) |";
+    output += "\n| ------ | ------ | ------ |";
+
+    projects.forEach(project => {
+        const pipelineBadge = `${project.web_url}/badges/${project.default_branch}/pipeline.svg`;
+        const pipelineUrl = `${project.web_url}/pipelines`;
+        const codeCoverageBadge = `${project.web_url}/badges/${project.default_branch}/coverage.svg`;
+        const codeCoverageUrl = `${project.web_url}`; //TODO path to latest pipeline code coverage report
+
+        output += `\n| **${project.name}** | [![pipeline status](${pipelineBadge})](${pipelineUrl}) |[![coverage report](${codeCoverageBadge})](${codeCoverageUrl}) |`
+    });
+
+    output += `\n\n Generated on (${new Date()} using ![Gitlab Badge Generator](https://github.com/DarkGuardsman/Gitlab-badge-generator)`;
+
+    //Output file
+    fileSystem.writeFileSync(path, output);
 
 }
