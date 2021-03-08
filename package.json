@@ -1,0 +1,46 @@
+{
+  "name": "gitlab_badge_generator",
+  "version": "1.0.0",
+  "description": "Generates badges for gitlab in a markdown format for listing all projects with pipeline and code coverage status",
+  "scripts": {
+    "build": "rm -rf dist && microbundle",
+    "start": "node ./dist/index.js --start 353096 --end 843212",
+    "test": "jest --coverage --watchAll=false",
+    "lint:check": "./node_modules/.bin/eslint src --debug",
+    "lint:fix": "./node_modules/.bin/eslint src --fix"
+  },
+  "main": "dist/index.js",
+  "umd:main": "dist/index.umd.js",
+  "module": "dist/index.m.js",
+  "source": "src/index.js",
+  "files": [
+    "package.json",
+    "README.md",
+    "dist/**.**",
+    "src/**"
+  ],
+  "author": "Robin Seifert",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/node": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "babel-loader": "^8.0.6",
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "jest": "^24.9.0",
+    "jest-cli": "^24.9.0",
+    "microbundle": "^0.11.0",
+    "npm-snapshot": "^1.0.3",
+    "prettier": "^1.18.2"
+  }
+}
